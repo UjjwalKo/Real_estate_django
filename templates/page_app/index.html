@@ -1,0 +1,97 @@
+{% extends "base/base.html" %}
+{% load humanize %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+  <section id="listings" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-3">Some Listings</h2>
+      <div class="row">
+
+        {% if listings %}
+          {% for listing in listings %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100">
+                <div class="position-absolute top-0 end-0 p-2">
+                  <h5><span class="badge bg-primary text-light">Rs.{{ listing.price | intcomma }}</span></h5>
+                </div>
+                <img class="card-img-top" src="{{listing.image_com.url}}" alt="">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">{{listing.title}}</h5>                 
+                  <p class="card-text">
+                    <i class="fa-solid fa-location-dot text-secondary"></i> Address: {{listing.address}}
+                  </p>
+                  <hr>
+                  <div class="row py-2 text-secondary">
+                    <div class="col-6">
+                      <i class="fas fa-th-large"></i> Sqft: {{listing.sqft}}
+                    </div>
+                    <div class="col-6">
+                      <i class="fas fa-car"></i> Parking: {{listing.parking}}
+                    </div>
+                  </div>
+                  <div class="row py-2 text-secondary">
+                    <div class="col-6">
+                      <i class="fas fa-bed"></i> Bedrooms: {{listing.bedrooms}}
+                    </div>
+                    <div class="col-6">
+                      <i class="fas fa-bath"></i> Bathrooms: {{listing.bathrooms}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row py-2 text-secondary">
+                    <div class="col-12">
+                      <i class="fas fa-user"></i> {{listing.broker}}
+                    </div>
+                  </div>
+                  <div class="row text-secondary pb-2">
+                    <div class="col-6">
+                      <i class="fas fa-clock"></i> {{listing.post_date | timesince}}
+                    </div>
+                  </div>
+                  <hr>
+                  <a href="{% url 'listing' listing.id %}" class="btn btn-primary btn-block">More Info</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No Listings Found</p>
+        {% endif %}
+      </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="py-5 bg-secondary text-white">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-4">
+          <i class="fas fa-comment fa-4x mr-4"></i>
+          <hr>
+          <h3>Disclaimer</h3>
+          <p>DalalMarket is a Real Estate Marketplace and an Information Hub to help the Real Estate Agencies, 
+            Private Seller and Buyers, Developers, and doesn't control in any manner any transactions between the Seller and the 
+            Agent or buyer. The details displayed on the website are for informational purposes only.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-home fa-4x mr-4"></i>
+          <hr>
+          <h3>Rentaing & Selling</h3>
+          <p>Streamline your property journey with our Real Estate app, offering seamless experiences 
+            for renting and selling properties effortlessly.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fa-solid fa-location-dot fa-4x mr-4"></i>
+          <hr>
+          <h3>Contact & Location</h3>
+          <p>+977 9805252525
+            dalalmarket@gmail.com
+            Maitidevi, Kathmandu
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

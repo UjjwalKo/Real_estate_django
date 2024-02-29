@@ -1,0 +1,140 @@
+{% extends "base/base.html" %}
+{% load humanize %}
+
+{% block title %}
+  Listings
+{% endblock title %}
+
+{% block content %}
+  <section id="showcase-inner" class="py-5 text-black">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-12">
+          <h1 class="display-4">Browse Properties</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Breadcrumb: It is a secondary navigation scheme that reveals the user's location in a website or web application.  -->
+  <section id="bc" class="mt-3">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{% url "index" %}">
+              <i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li class="breadcrumb-item active">Listings</li>
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Listings -->
+  {% if user.is_authenticated %}
+  <section id="listings" class="py-4">
+    <div class="container">
+      <div class="row">
+        {% if listings %}
+          {% for listing in listings %}
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100">
+                <div class="position-absolute top-0 end-0 p-2">
+                  <h5><span class="badge bg-primary text-light">Rs.{{ listing.price | intcomma }}</span></h5>
+                </div>
+                <img class="card-img-top" src="{{listing.image_com.url}}" alt="">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">{{listing.title}}</h5>                 
+                  <p class="card-text">
+                    <i class="fa-solid fa-location-dot text-secondary"></i> Address: {{listing.address}}
+                  </p>
+                  <hr>
+                  <div class="row py-2 text-secondary">
+                    <div class="col-6">
+                      <i class="fas fa-th-large"></i> Sqft: {{listing.sqft}}
+                    </div>
+                    <div class="col-6">
+                      <i class="fas fa-car"></i> Parking: {{listing.parking}}
+                    </div>
+                  </div>
+                  <div class="row py-2 text-secondary">
+                    <div class="col-6">
+                      <i class="fas fa-bed"></i> Bedrooms: {{listing.bedrooms}}
+                    </div>
+                    <div class="col-6">
+                      <i class="fas fa-bath"></i> Bathrooms: {{listing.bathrooms}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row py-2 text-secondary">
+                    <div class="col-12">
+                      <i class="fas fa-user"></i> {{listing.broker}}
+                    </div>
+                  </div>
+                  <div class="row text-secondary pb-2">
+                    <div class="col-6">
+                      <i class="fas fa-clock"></i> {{listing.post_date | timesince}}
+                    </div>
+                  </div>
+                  <hr>
+                  <a href="{% url 'listing' listing.id %}" class="btn btn-primary btn-block">More Info</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p>No Listings Found</p>
+        {% endif %}
+      </div>
+      {% else %}
+      <section id="showcase-inner" class="py-5 text-black">
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-md-12">
+              <h1 class="display-4">Please Login to view Listings</h1>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}                           {% comment "" %}Yaha sama{% endcomment %} 
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="pagination justify-content-center">
+            {% if listings.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ listings.previous_page_number }}">&laquo;</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+              </li>
+            {% endif %}
+          
+            {% for num in listings.paginator.page_range %}
+              {% if listings.number == num %}
+                <li class="page-item active">
+                  <span class="page-link">{{ num }}</span>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          
+            {% if listings.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ listings.next_page_number }}">&raquo;</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+              </li>
+            {% endif %}
+          </ul>          
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
